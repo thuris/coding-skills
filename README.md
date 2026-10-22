@@ -1,12 +1,12 @@
-# Personal coding skills (v4)
+# Personal coding skills (v5)
 
-Three skills you invoke by name, plus a short set of standing instructions for every coding session. This is Opus's revision of Argon's v3; the earlier versions sit beside it.
+Three skills you invoke by name, plus a short set of standing instructions for every coding session. v4 was Opus's revision of Argon's v3; v5 reworks the interview skills after a round of real use.
 
 ## What's here
 
 | File | Where it goes | Purpose |
 |---|---|---|
-| [interview](interview/SKILL.md) | Skills folder | Clarify the outcome, scope, constraints, and how to check the result before starting; suits new projects and work that isn't code |
+| [interview](interview/SKILL.md) | Skills folder | Clarify the outcome, scope, constraints, and how to check the result, and leave a handoff for implementation in a new session; suits new projects and work that isn't code |
 | [interview-with-prep](interview-with-prep/SKILL.md) | Skills folder | For existing projects: read the project first, then ask only what it can't answer |
 | [streamline](streamline/SKILL.md) | Skills folder | Simplify a working change without changing its behavior, with a subagent doing the review |
 | [house-style.md](house-style.md) | Standing instructions | Fit in with existing code without copying its mistakes, and send code reviews to a subagent |
@@ -36,13 +36,19 @@ In Claude Code and Codex, asking in plain words ("interview me about this") won'
 - **Codex:** `~/.codex/AGENTS.md`.
 - **Hermes:** the AGENTS.md that every profile on the install loads. Hermes looks for AGENTS.md by walking up from the session's working folder, so check that it still loads when a session works inside a repository.
 
+The handoff folder for the interview skills goes in that file too, as a separate line rather than one of house-style's bullets, since the right folder differs between machines and harnesses.
+
 ## Design choices
 
 - **Checking results.** Agree on the smallest set of checks that would show the behavior works. Trying the behavior where it's used beats a build or typecheck, which only shows that the code compiles. Add tests when logic branches, when a bug could come back unnoticed, or when the project expects them. There's no test-first rule.
-- **Permission carries forward.** If you asked for discussion, a skill ends with a summary. If you already said to go ahead, it proceeds once the important questions are settled. If you said neither, it asks.
+- **Interview to handoff.** The user decides when the interview is complete. Both interview skills keep a handoff document up to date as the interview goes, for implementation in a new session, including decisions, reasons, and rejected approaches. Writing it as they go means a compaction or a full context doesn't lose the interview; if it has to continue in another session, the document becomes an interview continuation with the remaining questions. Handoffs go in a folder named in your standing instructions; the first time on a machine, the agent proposes one outside the repository and offers to record it. Neither begins implementation unless you ask for it after the handoff is saved.
 - **New code is open; shipped behavior isn't.** Streamline may change how code from the current change fails or falls back. Changes to behavior that has already shipped are flagged for you instead.
 - **Review by a fresh reader.** Streamline hands the review to a subagent (the harness's default, or a copy of the main model) that didn't write the code and isn't told the author's reasons. The subagent gets the relevant sections of the skill in its instructions, since Claude Code won't preload a skill marked `disable-model-invocation` into a subagent. Where subagents aren't available, the agent reviews the code itself. The standing instructions apply the same rule to every code review.
 - **Short on purpose.** Each skill stays around a page.
+
+## Changes from v4
+
+- **Interview:** both skills now end in a handoff document for implementation in a new session, written as the interview goes rather than at the end. You decide when the interview is over: the rule to stop once small assumptions could cover the rest is gone, and permission given earlier no longer cuts the interview short. Questions are counted by what you'd have to answer, so subquestions can't be bundled to fit the limit of three. The agent asks early about circumstances it hasn't thought of, and doesn't take absence from the repository as absence from the real setup. A continuation handoff covers interviews that need another session. interview-with-prep's handoff also records the commit it was based on. Handoffs live in a folder named in your standing instructions, outside the repository, and open with a note telling the implementation session what to check first.
 
 ## Changes from v3
 
